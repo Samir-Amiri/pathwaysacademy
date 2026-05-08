@@ -395,7 +395,80 @@ export default function PathwaysAcademyWebsite() {
             </Card>
           </div>
         </section>
+        <section id="student-life" className="bg-slate-100 px-6 py-24 text-slate-950">
+          <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#E86233]">
+                Student Life & Practical Support
+              </p>
+              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+                Prepare for studying, living, and arriving in the Netherlands.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-slate-700">
+                Pathways Academy supports international students beyond admission by helping them understand visa requirements, residence permit preparation, financial planning, accommodation, insurance, and arrival steps in the Netherlands.
+              </p>
+            </div>
 
+            <div className="mt-14 grid gap-6 lg:grid-cols-3">
+              <div className="rounded-3xl bg-white p-8 shadow-sm">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F97343] text-2xl">
+                  🛂
+                </div>
+                <h3 className="text-2xl font-semibold text-slate-950">
+                  Visa & Residence Permit
+                </h3>
+                <p className="mt-4 leading-7 text-slate-700">
+                  We guide students through the preparation process for the Dutch student visa, residence permit, financial evidence, appointment readiness, and arrival requirements.
+                </p>
+                <ul className="mt-6 space-y-3 text-slate-700">
+                  <li>✓ MVV visa guidance</li>
+                  <li>✓ Residence permit preparation</li>
+                  <li>✓ Financial proof checklist</li>
+                  <li>✓ Embassy appointment support</li>
+                  <li>✓ BSN and registration guidance</li>
+                </ul>
+              </div>
+
+              <div className="rounded-3xl bg-white p-8 shadow-sm">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F97343] text-2xl">
+                  💶
+                </div>
+                <h3 className="text-2xl font-semibold text-slate-950">
+                  Student Finance
+                </h3>
+                <p className="mt-4 leading-7 text-slate-700">
+                  Studying abroad requires careful financial planning. We help students understand tuition payments, living expenses, insurance costs, and budgeting before arrival.
+                </p>
+                <ul className="mt-6 space-y-3 text-slate-700">
+                  <li>✓ Tuition fee planning</li>
+                  <li>✓ Living cost estimation</li>
+                  <li>✓ Scholarship information</li>
+                  <li>✓ Health insurance guidance</li>
+                  <li>✓ Student budget preparation</li>
+                </ul>
+              </div>
+
+              <div className="rounded-3xl bg-white p-8 shadow-sm">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F97343] text-2xl">
+                  🏡
+                </div>
+                <h3 className="text-2xl font-semibold text-slate-950">
+                  Living & Arrival Support
+                </h3>
+                <p className="mt-4 leading-7 text-slate-700">
+                  Our support continues after admission. We help students prepare for housing, travel, municipality registration, insurance, and settling into student life.
+                </p>
+                <ul className="mt-6 space-y-3 text-slate-700">
+                  <li>✓ Accommodation guidance</li>
+                  <li>✓ Pre-departure checklist</li>
+                  <li>✓ Travel preparation</li>
+                  <li>✓ Municipality registration guidance</li>
+                  <li>✓ Student life orientation</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
         <section id="contact" className="bg-white px-6 py-24 text-slate-950">
           <div className="mx-auto max-w-7xl rounded-[2rem] bg-[#F97343] p-10 md:p-14">
             <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
