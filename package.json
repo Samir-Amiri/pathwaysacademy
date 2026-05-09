@@ -10,6 +10,7 @@
     "react": "latest",
     "react-dom": "latest",
     "framer-motion": "latest"
+    "react-router-dom": "latest",
   },
   "devDependencies": {
     "tailwindcss": "3.4.17",
