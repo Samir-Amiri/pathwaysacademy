@@ -654,14 +654,34 @@ export default function PathwaysAcademyWebsite() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <SiteHeader openApplicationForm={openApplicationForm} />
-      <Routes>
-        <Route path="/" element={<HomePage openApplicationForm={openApplicationForm} />} />
-        <Route path="/visa-residence-permit" element={<VisaPage />} />
-        <Route path="/student-finance" element={<FinancePage />} />
-        <Route path="/living-in-netherlands" element={<LivingPage />} />
-      </Routes>
+<Routes>
+  <Route path="/" element={<HomePage />} />
+
+  <Route
+    path="/visa-residence-permit"
+    element={<VisaPage />}
+  />
+
+  <Route
+    path="/student-finance"
+    element={<FinancePage />}
+  />
+
+  <Route
+    path="/living-in-netherlands"
+    element={<LivingPage />}
+  />
+
+  <Route
+    path="/programmes/international-foundation-programme"
+    element={<InternationalFoundationPage />}
+  />
+
+  <Route
+    path="/programmes/english-academic-preparation"
+    element={<EnglishPreparationPage />}
+  />
+</Routes>
       <Footer scrollToSection={scrollToSection} />
     </div>
   );
