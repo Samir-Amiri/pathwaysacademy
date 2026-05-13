@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
+    "resend": "^3.5.0"
     "vite": "latest",
     "react": "latest",
     "react-dom": "latest",
