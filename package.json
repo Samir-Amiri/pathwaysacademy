@@ -6,15 +6,12 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
-    "resend": "^3.5.0"
     "vite": "latest",
     "react": "latest",
     "react-dom": "latest",
     "framer-motion": "latest",
     "react-router-dom": "latest",
-    "tailwindcss": "latest",
-    "postcss": "latest",
-    "autoprefixer": "latest"
+    "resend": "^3.5.0"
   },
   "devDependencies": {}
 }
