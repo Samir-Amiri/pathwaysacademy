@@ -136,7 +136,6 @@ try {
   setLoading(false);
 }
     }
-  }
 
   return (
     <section id="contact" className="bg-white px-6 py-24 text-slate-950">
