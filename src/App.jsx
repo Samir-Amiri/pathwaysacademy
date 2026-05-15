@@ -138,7 +138,7 @@ try {
   console.error("FORM ERROR:", error);
   alert(error.message);
   setStatus("error");
-} finally {
+finally {
   setLoading(false);
 }
     console.error("FORM ERROR:", error);
