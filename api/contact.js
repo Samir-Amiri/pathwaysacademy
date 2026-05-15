@@ -17,7 +17,6 @@ module.exports = async function handler(req, res) {
    await resend.emails.send({
   from: "Pathways Academy <admissions@pathwaysacademy.nl>",
   to: "admissions@pathwaysacademy.nl",
-  replyTo: email,
   subject: "New Student Enquiry — Pathways Academy",
       html: `
         <h2>New Student Enquiry</h2>
