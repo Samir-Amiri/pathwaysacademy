@@ -653,36 +653,27 @@ export default function PathwaysAcademyWebsite() {
     if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  return (
-<Routes>
-  <Route path="/" element={<HomePage />} />
+return (
+  <div className="min-h-screen bg-slate-950 text-white">
+    <SiteHeader scrollToSection={scrollToSection} />
 
-  <Route
-    path="/visa-residence-permit"
-    element={<VisaPage />}
-  />
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/visa-residence-permit" element={<VisaPage />} />
+      <Route path="/student-finance" element={<FinancePage />} />
+      <Route path="/living-in-netherlands" element={<LivingPage />} />
+      <Route
+        path="/programmes/international-foundation-programme"
+        element={<InternationalFoundationPage />}
+      />
+      <Route
+        path="/programmes/english-academic-preparation"
+        element={<EnglishPreparationPage />}
+      />
+    </Routes>
 
-  <Route
-    path="/student-finance"
-    element={<FinancePage />}
-  />
-
-  <Route
-    path="/living-in-netherlands"
-    element={<LivingPage />}
-  />
-
-  <Route
-    path="/programmes/international-foundation-programme"
-    element={<InternationalFoundationPage />}
-  />
-
-  <Route
-    path="/programmes/english-academic-preparation"
-    element={<EnglishPreparationPage />}
-  />
-</Routes>
-      <Footer scrollToSection={scrollToSection} />
-    </div>
+    <Footer scrollToSection={scrollToSection} />
+  </div>
+);
   );
 }
