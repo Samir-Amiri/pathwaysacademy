@@ -174,11 +174,11 @@ try {
             {loading ? "Sending..." : "Submit Application"}
           </button>
 
-          {status === "success" && (
-            <p className="mt-4 rounded-xl bg-green-100 p-3 text-sm font-semibold text-green-800">
-              Thank you. Your enquiry has been sent successfully.
-            </p>
-          )}
+  {status === "error" && (
+  <p className="mt-4 rounded-xl bg-red-100 p-3 text-sm font-semibold text-red-800">
+    Message failed. Please email admissions@pathwaysacademy.nl.
+  </p>
+)}
 
           {status === "error" && (
             <p className="mt-4 rounded-xl bg-red-100 p-3 text-sm font-semibold text-red-800">
