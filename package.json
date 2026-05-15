@@ -13,5 +13,9 @@
     "react-router-dom": "latest",
     "resend": "^3.5.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.35",
+    "autoprefixer": "^10.4.18"
+  }
 }
