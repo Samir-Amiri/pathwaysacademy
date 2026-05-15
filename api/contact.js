@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     const { fullName, email, phone, country, programme, message } = req.body;
 
     await resend.emails.send({
-      from: "Pathways Academy <onboarding@resend.dev>",
+      from: "Pathways Academy <admissions@pathwaysacademy.nl>",
       to: "admissions@pathwaysacademy.nl",
       reply_to: email,
       subject: "New Student Enquiry - Pathways Academy",
@@ -28,7 +28,11 @@ export default async function handler(req, res) {
     });
 
     return res.status(200).json({ success: true });
-  } catch (error) {
-    return res.status(500).json({ error: "Email sending failed" });
-  }
+} catch (error) {
+  console.error(error);
+
+  return res.status(500).json({
+    error: "Email sending failed",
+    details: error.message,
+  });
 }
