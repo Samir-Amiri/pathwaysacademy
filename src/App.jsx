@@ -675,5 +675,4 @@ return (
     <Footer scrollToSection={scrollToSection} />
   </div>
 );
-  );
 }
