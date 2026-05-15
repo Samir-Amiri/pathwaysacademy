@@ -97,45 +97,43 @@ function ContactForm() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    setLoading(true);
-    setStatus("");
+  e.preventDefault();
+  setLoading(true);
+  setStatus("");
 
-    const form = new FormData(e.currentTarget);
+  const form = new FormData(e.currentTarget);
 
-    const payload = {
-      fullName: form.get("fullName"),
-      email: form.get("email"),
-      phone: form.get("phone"),
-      country: form.get("country"),
-      programme: form.get("programme"),
-      message: form.get("message"),
-    };
+  const payload = {
+    fullName: form.get("fullName"),
+    email: form.get("email"),
+    phone: form.get("phone"),
+    country: form.get("country"),
+    programme: form.get("programme"),
+    message: form.get("message"),
+  };
 
-try {
-  const res = await fetch("/api/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (!res.ok) {
-    throw new Error(data.details || data.error || "Message failed");
+    if (!res.ok) {
+      throw new Error(data.details || data.error || "Message failed");
+    }
+
+    setStatus("success");
+    e.currentTarget.reset();
+  } catch (error) {
+    console.error("FORM ERROR:", error);
+    alert(error.message);
+    setStatus("error");
+  } finally {
+    setLoading(false);
   }
-
-  setStatus("success");
-  e.currentTarget.reset();
-
-} catch (error) {
-  console.error("FORM ERROR:", error);
-  alert(error.message);
-  setStatus("error");
-}
-
-} finally {
-  setLoading(false);
 }
     }
 
