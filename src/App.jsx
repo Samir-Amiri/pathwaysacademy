@@ -112,22 +112,35 @@ function ContactForm() {
     message: form.get("message"),
   };
 
+try {
+  const res = await fetch("/api/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  const text = await res.text();
+  let data = {};
+
   try {
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(text.slice(0, 120));
+  }
 
-    const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.details || data.error || "Message failed");
+  }
 
-    if (!res.ok) {
-      throw new Error(data.details || data.error || "Message failed");
-    }
-
-    setStatus("success");
-    e.currentTarget.reset();
-  } catch (error) {
+  setStatus("success");
+  e.currentTarget.reset();
+} catch (error) {
+  console.error("FORM ERROR:", error);
+  alert(error.message);
+  setStatus("error");
+} finally {
+  setLoading(false);
+}
     console.error("FORM ERROR:", error);
     alert(error.message);
     setStatus("error");
