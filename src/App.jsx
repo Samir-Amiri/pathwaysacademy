@@ -635,7 +635,33 @@ function LivingPage() {
     </main>
   );
 }
+const InternationalFoundationPage = () => {
+  return (
+    <div className="min-h-screen bg-slate-950 text-white p-20">
+      <h1 className="text-5xl font-bold mb-6">
+        International Foundation Programme
+      </h1>
 
+      <p className="text-xl text-slate-300 max-w-3xl">
+        Pathways Academy prepares students for bachelor degree entry in the Netherlands through academic preparation, English support, and university transition guidance.
+      </p>
+    </div>
+  );
+};
+
+const EnglishPreparationPage = () => {
+  return (
+    <div className="min-h-screen bg-slate-950 text-white p-20">
+      <h1 className="text-5xl font-bold mb-6">
+        English Academic Preparation
+      </h1>
+
+      <p className="text-xl text-slate-300 max-w-3xl">
+        Improve academic English, IELTS readiness, communication skills, and classroom confidence before starting university studies.
+      </p>
+    </div>
+  );
+};
 export default function PathwaysAcademyWebsite() {
   const applicationFormUrl = "https://form.typeform.com/to/CaOTBLSt?typeform-source=pathwaysacademy.nl";
 
