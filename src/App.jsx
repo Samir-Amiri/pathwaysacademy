@@ -129,8 +129,10 @@ try {
   e.currentTarget.reset();
 
 } catch (error) {
-  console.error(error);
-  setStatus(error.message);
+  console.error("FORM ERROR:", error);
+  alert(error.message);
+  setStatus("error");
+}
 
 } finally {
   setLoading(false);
