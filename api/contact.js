@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const { fullName, email, phone, country, programme, message } = req.body;
 
     const data = await resend.emails.send({
-      from: "Pathways Academy <admissions@pathwaysacademy.nl>",
+      from: "Pathways Academy <muzamel.hamidzadah@gmail.com>",
       to: ["admissions@pathwaysacademy.nl"],
       subject: "New Student Enquiry",
       html: `
