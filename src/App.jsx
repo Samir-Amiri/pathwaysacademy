@@ -112,21 +112,29 @@ function ContactForm() {
       message: form.get("message"),
     };
 
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+try {
+  const res = await fetch("/api/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
 
-      if (!res.ok) throw new Error("Failed");
+  const data = await res.json();
 
-      setStatus("success");
-      e.currentTarget.reset();
-    } catch {
-      setStatus("error");
-    } finally {
-      setLoading(false);
+  if (!res.ok) {
+    throw new Error(data.details || data.error || "Message failed");
+  }
+
+  setStatus("success");
+  e.currentTarget.reset();
+
+} catch (error) {
+  console.error(error);
+  setStatus(error.message);
+
+} finally {
+  setLoading(false);
+}
     }
   }
 
