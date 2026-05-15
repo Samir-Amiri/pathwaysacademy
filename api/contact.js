@@ -14,11 +14,11 @@ module.exports = async function handler(req, res) {
 
     const { fullName, email, phone, country, programme, message } = req.body;
 
-    await resend.emails.send({
-      from: "Pathways Academy <admissions@pathwaysacademy.nl>",
-      to: "admissions@pathwaysacademy.nl",
-      reply_to: email,
-      subject: "New Student Enquiry — Pathways Academy",
+   await resend.emails.send({
+  from: "Pathways Academy <admissions@pathwaysacademy.nl>",
+  to: "admissions@pathwaysacademy.nl",
+  replyTo: email,
+  subject: "New Student Enquiry — Pathways Academy",
       html: `
         <h2>New Student Enquiry</h2>
         <p><strong>Full Name:</strong> ${fullName}</p>
