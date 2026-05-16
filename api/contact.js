@@ -13,6 +13,19 @@ const FROM = "Pathways Academy <admissions@pathwaysacademy.nl>";
 const ADMISSIONS = "admissions@pathwaysacademy.nl";
 
 module.exports = async function handler(req, res) {
+  if (req.method === "GET") {
+    const key = process.env.RESEND_API_KEY || "";
+    res.status(200).json({
+      diagnostic: true,
+      functionRunning: true,
+      hasResendKey: key.length > 0,
+      keyLength: key.length,
+      keyPrefix: key.slice(0, 3),
+      nodeVersion: process.version,
+    });
+    return;
+  }
+
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
     return;
