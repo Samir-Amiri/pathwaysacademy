@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 function Card({ children, className = "" }) {
@@ -140,15 +140,44 @@ const process = [
 ];
 
 export default function PathwaysAcademyWebsite() {
-  const applicationFormUrl = "https://form.typeform.com/to/CaOTBLSt?typeform-source=pathwaysacademy.nl";
-
-  const openApplicationForm = () => {
-    window.open(applicationFormUrl, "_blank", "noopener,noreferrer");
-  };
+  const [status, setStatus] = useState("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const payload = {
+      fullName: form.fullName.value.trim(),
+      email: form.email.value.trim(),
+      whatsapp: form.whatsapp.value.trim(),
+      programme: form.programme.value,
+      message: form.message.value.trim(),
+    };
+
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong. Please try again.");
+      }
+      setStatus("success");
+      form.reset();
+    } catch (error) {
+      setErrorMsg(error.message || "Something went wrong. Please try again.");
+      setStatus("error");
+    }
   };
 
   return (
@@ -164,7 +193,7 @@ export default function PathwaysAcademyWebsite() {
             <button type="button" onClick={() => scrollToSection("admissions")} className="transition hover:text-white">Admissions</button>
             <button type="button" onClick={() => scrollToSection("contact")} className="transition hover:text-white">Contact</button>
           </nav>
-          <button type="button" onClick={openApplicationForm} className="inline-flex items-center justify-center rounded-full bg-[#F97343] px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-[#FB8C66]">Apply Now</button>
+          <button type="button" onClick={() => scrollToSection("contact")} className="inline-flex items-center justify-center rounded-full bg-[#F97343] px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-[#FB8C66]">Apply Now</button>
         </div>
       </header>
 
@@ -184,7 +213,7 @@ export default function PathwaysAcademyWebsite() {
                 Pathways Academy delivers pathway education, academic preparation, English-language readiness, and progression support for students entering higher education in the Netherlands.
               </p>
               <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-                <button type="button" onClick={openApplicationForm} className="inline-flex h-12 items-center justify-center rounded-full bg-[#F97343] px-7 text-base font-semibold text-slate-950 transition hover:bg-[#FB8C66]">
+                <button type="button" onClick={() => scrollToSection("contact")} className="inline-flex h-12 items-center justify-center rounded-full bg-[#F97343] px-7 text-base font-semibold text-slate-950 transition hover:bg-[#FB8C66]">
                   Start Your Application <ArrowRightIcon className="ml-2 h-5 w-5" />
                 </button>
                 <button type="button" onClick={() => scrollToSection("programmes")} className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 text-base text-white transition hover:bg-white/10">
@@ -397,17 +426,81 @@ export default function PathwaysAcademyWebsite() {
         </section>
 
         <section id="contact" className="bg-white px-6 py-24 text-slate-950">
-          <div className="mx-auto max-w-7xl rounded-[2rem] bg-[#F97343] p-10 md:p-14">
-            <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+          <div className="mx-auto max-w-7xl rounded-[2rem] bg-[#F97343] p-8 md:p-14">
+            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-800">Apply Now</p>
                 <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Ready to begin your pathway to the Netherlands?</h2>
-                <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-800">Complete the Pathways Academy application form and our admissions team will review your details, documents, programme interest, and next steps.</p>
-                <p className="mt-4 text-sm font-medium text-slate-800">Application form: <a href={applicationFormUrl} target="_blank" rel="noreferrer" className="underline decoration-slate-950/40 underline-offset-4 hover:text-slate-950">Open Typeform application</a></p>
+                <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-800">Complete the application form and our admissions team will review your details and contact you within four business working days.</p>
+                <p className="mt-4 text-sm font-medium text-slate-800">Prefer email? Write to <a href="mailto:admissions@pathwaysacademy.nl" className="underline decoration-slate-950/40 underline-offset-4 hover:text-slate-950">admissions@pathwaysacademy.nl</a></p>
               </div>
-              <div className="flex flex-col gap-4">
-                <button type="button" onClick={openApplicationForm} className="inline-flex h-12 items-center justify-center rounded-full bg-slate-950 px-7 text-base font-semibold text-white transition hover:bg-slate-800">Apply Now</button>
-                <a href="mailto:admissions@pathwaysacademy.nl?subject=Pathways%20Academy%20Application%20Question" className="inline-flex h-12 items-center justify-center rounded-full border border-slate-950/20 bg-white/50 px-7 text-base font-semibold text-slate-950 transition hover:bg-white">Email Admissions</a>
+
+              <div className="rounded-[1.75rem] bg-white p-6 shadow-xl md:p-8">
+                {status === "success" ? (
+                  <div className="flex flex-col items-center py-10 text-center">
+                    <CheckCircleIcon className="h-14 w-14 text-[#E86233]" />
+                    <h3 className="mt-5 text-2xl font-semibold text-slate-950">Application received</h3>
+                    <p className="mt-3 max-w-md leading-7 text-slate-600">
+                      Thank you for applying. A confirmation email has been sent to you. Our admissions team will contact you within four business working days.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setStatus("idle")}
+                      className="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-slate-950 px-6 text-sm font-semibold text-white transition hover:bg-slate-800"
+                    >
+                      Submit another application
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="grid gap-4">
+                    <div className="grid gap-1.5">
+                      <label htmlFor="fullName" className="text-sm font-semibold text-slate-700">Full name</label>
+                      <input id="fullName" name="fullName" type="text" required placeholder="Your full name"
+                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white" />
+                    </div>
+                    <div className="grid gap-1.5">
+                      <label htmlFor="email" className="text-sm font-semibold text-slate-700">Email address</label>
+                      <input id="email" name="email" type="email" required placeholder="you@example.com"
+                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white" />
+                    </div>
+                    <div className="grid gap-1.5">
+                      <label htmlFor="whatsapp" className="text-sm font-semibold text-slate-700">WhatsApp number</label>
+                      <input id="whatsapp" name="whatsapp" type="tel" required placeholder="+93 70 000 0000"
+                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white" />
+                    </div>
+                    <div className="grid gap-1.5">
+                      <label htmlFor="programme" className="text-sm font-semibold text-slate-700">Programme</label>
+                      <select id="programme" name="programme" required defaultValue=""
+                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white">
+                        <option value="" disabled>Select a programme</option>
+                        {programmes.map((programme) => (
+                          <option key={programme.title} value={programme.title}>{programme.title}</option>
+                        ))}
+                        <option value="Not sure yet">Not sure yet — please advise</option>
+                      </select>
+                    </div>
+                    <div className="grid gap-1.5">
+                      <label htmlFor="message" className="text-sm font-semibold text-slate-700">Comment / message</label>
+                      <textarea id="message" name="message" rows={4} placeholder="Tell us anything that will help us support your application"
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white" />
+                    </div>
+
+                    {status === "error" && (
+                      <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{errorMsg}</p>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={status === "loading"}
+                      className="mt-1 inline-flex h-12 items-center justify-center rounded-full bg-slate-950 px-7 text-base font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {status === "loading" ? "Sending application…" : "Submit Application"}
+                    </button>
+                    <p className="text-center text-xs text-slate-500">
+                      You will receive a confirmation email once your application is submitted.
+                    </p>
+                  </form>
+                )}
               </div>
             </div>
           </div>
