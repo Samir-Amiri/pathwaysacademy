@@ -1,151 +1,237 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-function Card({ children, className = "" }) {
-  return <div className={className}>{children}</div>;
-}
+/* ----------------------------------------------------------------------------
+   IMAGERY — free-licensed Unsplash photography.
+   To swap any image, replace the URL below. If a URL ever fails to load,
+   the layout gracefully falls back to a branded gradient.
+---------------------------------------------------------------------------- */
+const photos = {
+  hero: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1400&q=80",
+  netherlands: "https://images.unsplash.com/photo-1558369981-f9ca78462e61?auto=format&fit=crop&w=1200&q=80",
+  study: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
+  campus: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80",
+  students: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1200&q=80",
+  support: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
+};
 
-function CardContent({ children, className = "" }) {
-  return <div className={className}>{children}</div>;
-}
-
+/* ---------------------------------- Icons --------------------------------- */
 function IconBase({ children, className = "h-6 w-6" }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {children}
     </svg>
   );
 }
+const ArrowRightIcon = (p) => <IconBase {...p}><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></IconBase>;
+const CheckIcon = (p) => <IconBase {...p}><path d="M20 6 9 17l-5-5" /></IconBase>;
+const CheckCircleIcon = (p) => <IconBase {...p}><circle cx="12" cy="12" r="9" /><path d="m8 12 2.5 2.5L16 9" /></IconBase>;
+const GlobeIcon = (p) => <IconBase {...p}><circle cx="12" cy="12" r="10" /><path d="M2 12h20" /><path d="M12 2a15.3 15.3 0 0 1 0 20" /><path d="M12 2a15.3 15.3 0 0 0 0 20" /></IconBase>;
+const GraduationIcon = (p) => <IconBase {...p}><path d="M3 8 12 4l9 4-9 4-9-4Z" /><path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5" /><path d="M21 8v6" /></IconBase>;
+const FileCheckIcon = (p) => <IconBase {...p}><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7Z" /><path d="M14 2v5h5" /><path d="m9 15 2 2 4-5" /></IconBase>;
+const ShieldIcon = (p) => <IconBase {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /><path d="m9 12 2 2 4-5" /></IconBase>;
+const CompassIcon = (p) => <IconBase {...p}><circle cx="12" cy="12" r="10" /><path d="m16 8-4 8-4-4 8-4Z" /></IconBase>;
+const HeartIcon = (p) => <IconBase {...p}><path d="M19 14c1.5-1.5 3-3.2 3-5.5A4.5 4.5 0 0 0 12 6 4.5 4.5 0 0 0 2 8.5C2 10.8 3.5 12.5 5 14l7 7Z" /></IconBase>;
+const HomeIcon = (p) => <IconBase {...p}><path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V21h14V9.5" /><path d="M9 21v-6h6v6" /></IconBase>;
+const SparkleIcon = (p) => <IconBase {...p}><path d="M12 3v6M12 15v6M3 12h6M15 12h6" /><path d="m6 6 3 3M15 15l3 3M18 6l-3 3M9 15l-3 3" /></IconBase>;
+const StarIcon = (p) => <IconBase {...p}><path d="m12 3 2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.8 6.7 19.6l1-5.8L3.5 9.7l5.9-.9L12 3Z" /></IconBase>;
+const PlusIcon = (p) => <IconBase {...p}><path d="M12 5v14M5 12h14" /></IconBase>;
+const MinusIcon = (p) => <IconBase {...p}><path d="M5 12h14" /></IconBase>;
+const MailIcon = (p) => <IconBase {...p}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></IconBase>;
+const PhoneIcon = (p) => <IconBase {...p}><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7A2 2 0 0 1 22 16.9Z" /></IconBase>;
 
-function ArrowRightIcon(props) {
-  return <IconBase {...props}><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></IconBase>;
-}
-
-function CheckCircleIcon(props) {
-  return <IconBase {...props}><circle cx="12" cy="12" r="9" /><path d="m8 12 2.5 2.5L16 9" /></IconBase>;
-}
-
-function GraduationCapIcon(props) {
-  return <IconBase {...props}><path d="M3 8 12 4l9 4-9 4-9-4Z" /><path d="M7 10.5V15c0 1.7 2.2 3 5 3s5-1.3 5-3v-4.5" /><path d="M21 8v6" /></IconBase>;
-}
-
-function GlobeIcon(props) {
-  return <IconBase {...props}><circle cx="12" cy="12" r="10" /><path d="M2 12h20" /><path d="M12 2a15.3 15.3 0 0 1 0 20" /><path d="M12 2a15.3 15.3 0 0 0 0 20" /></IconBase>;
-}
-
-function FileCheckIcon(props) {
-  return <IconBase {...props}><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7Z" /><path d="M14 2v5h5" /><path d="m9 15 2 2 4-5" /></IconBase>;
-}
-
-function ShieldCheckIcon(props) {
-  return <IconBase {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /><path d="m9 12 2 2 4-5" /></IconBase>;
-}
-
-function CalendarIcon(props) {
-  return <IconBase {...props}><path d="M8 2v4" /><path d="M16 2v4" /><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M3 10h18" /></IconBase>;
-}
-
-function BuildingIcon(props) {
-  return <IconBase {...props}><path d="M4 21V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v17" /><path d="M3 21h18" /><path d="M8 6h1" /><path d="M12 6h1" /><path d="M8 10h1" /><path d="M12 10h1" /><path d="M8 14h1" /><path d="M12 14h1" /></IconBase>;
-}
-
-function MessageIcon(props) {
-  return <IconBase {...props}><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z" /></IconBase>;
-}
-
-function PlaneIcon(props) {
-  return <IconBase {...props}><path d="M22 16.5 2 12l20-4.5-5.5 4.5L22 16.5Z" /><path d="M2 12h14.5" /></IconBase>;
-}
-
-function PathwaysLogoMark({ className = "h-11 w-11" }) {
+/* --------------------------------- Helpers -------------------------------- */
+function Reveal({ children, delay = 0, className = "" }) {
   return (
-    <svg className={className} viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M17 69C32 31 57 28 78 43C93 54 106 41 112 19" stroke="#F97343" strokeWidth="13" strokeLinecap="round" />
-      <path d="M16 68C33 39 55 44 75 55C92 64 106 48 113 23" stroke="#F97343" strokeWidth="7" strokeLinecap="round" opacity="0.65" />
-    </svg>
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-70px" }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
   );
 }
 
-function Logo({ compact = false, dark = false }) {
-  const textColor = dark ? "text-slate-950" : "text-white";
-  const subColor = dark ? "text-slate-600" : "text-slate-300";
-
+function Photo({ src, alt, className = "" }) {
   return (
-    <div className="flex items-center gap-3" aria-label="Pathways Academy logo">
-      <PathwaysLogoMark className={compact ? "h-10 w-12" : "h-12 w-14"} />
-      {!compact && (
-        <div className="leading-none">
-          <p className={`font-serif text-2xl font-semibold tracking-tight ${textColor}`}>Pathways</p>
-          <p className={`mt-1 font-serif text-lg tracking-wide ${subColor}`}>Academy</p>
-        </div>
-      )}
+    <div className={`relative overflow-hidden bg-gradient-to-br from-[#F97343]/40 via-slate-800 to-slate-950 ${className}`}>
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onError={(e) => { e.currentTarget.style.opacity = 0; }}
+        className="h-full w-full object-cover transition-opacity duration-700"
+      />
     </div>
   );
 }
 
+function Eyebrow({ children, dark = false }) {
+  return (
+    <p className={`text-xs font-semibold uppercase tracking-[0.28em] ${dark ? "text-[#E8552B]" : "text-[#FB8C66]"}`}>
+      {children}
+    </p>
+  );
+}
+
+/* ---------------------------------- Logo ---------------------------------- */
+function LogoMark({ className = "h-11 w-12" }) {
+  return (
+    <svg className={className} viewBox="0 0 120 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M17 69C32 31 57 28 78 43C93 54 106 41 112 19" stroke="#F97343" strokeWidth="13" strokeLinecap="round" />
+      <path d="M16 68C33 39 55 44 75 55C92 64 106 48 113 23" stroke="#F97343" strokeWidth="7" strokeLinecap="round" opacity="0.6" />
+    </svg>
+  );
+}
+function Logo({ compact = false, dark = false }) {
+  return (
+    <div className="flex items-center gap-3" aria-label="Pathways Academy">
+      <LogoMark className={compact ? "h-9 w-10" : "h-11 w-12"} />
+      <div className="leading-none">
+        <p className={`font-display text-xl font-semibold tracking-tight ${dark ? "text-slate-950" : "text-white"}`}>Pathways</p>
+        <p className={`mt-0.5 text-[0.7rem] font-medium uppercase tracking-[0.25em] ${dark ? "text-slate-500" : "text-slate-400"}`}>Academy</p>
+      </div>
+    </div>
+  );
+}
+
+/* ----------------------------------- Data --------------------------------- */
+const navLinks = [
+  { id: "netherlands", label: "Why the Netherlands" },
+  { id: "programmes", label: "Programmes" },
+  { id: "process", label: "How It Works" },
+  { id: "fees", label: "Fees" },
+  { id: "faq", label: "FAQ" },
+];
+
+const heroStats = [
+  { value: "NL", label: "Dutch higher-education focus" },
+  { value: "2", label: "Structured pathway routes" },
+  { value: "360°", label: "Support to arrival" },
+];
+
+const whyNetherlands = [
+  { icon: GraduationIcon, title: "Globally respected universities", text: "Dutch institutions are known worldwide for academic quality, research, and graduate outcomes." },
+  { icon: GlobeIcon, title: "Taught in English", text: "A wide range of English-taught programmes makes the Netherlands accessible to international students." },
+  { icon: SparkleIcon, title: "Strong value for tuition", text: "High academic standards combined with reasonable living and study costs compared to other destinations." },
+  { icon: HeartIcon, title: "Safe and welcoming", text: "An open, multicultural society where international students feel supported and at home." },
+];
+
 const programmes = [
   {
     title: "International Foundation Programme",
-    subtitle: "One-year pathway programme",
-    description: "A structured pathway designed to strengthen academic English, study skills, and subject knowledge before progression to university-level study in the Netherlands.",
-    facts: ["September intake", "Academic skills and English preparation", "Progression-focused study planning"],
+    subtitle: "One-year pathway",
+    description: "A structured year that builds academic English, study skills, and subject knowledge so you progress with confidence into university-level study in the Netherlands.",
+    facts: ["September intake", "Academic English & study skills", "Progression-focused planning"],
   },
   {
     title: "English Academic Preparation",
-    subtitle: "Academic English and readiness route",
-    description: "Focused preparation for students who need stronger academic communication, study confidence, and readiness for English-taught higher education.",
-    facts: ["English-language development", "Academic writing and presentation skills", "University study preparation"],
+    subtitle: "Academic readiness route",
+    description: "Focused preparation for students who need stronger academic communication and the confidence to thrive in English-taught higher education.",
+    facts: ["Academic writing & speaking", "University readiness coaching", "Flexible start"],
   },
 ];
 
-const services = [
-  { icon: GraduationCapIcon, title: "Academic Pathway Guidance", text: "Students receive guidance on pathway routes, entry requirements, progression options, and academic readiness for Dutch higher education." },
-  { icon: FileCheckIcon, title: "Admissions Coordination", text: "Our admissions team supports application forms, document checklists, offer-letter guidance, and applicant communication." },
-  { icon: ShieldCheckIcon, title: "Visa Preparation", text: "Students receive practical guidance for visa documentation, financial evidence, timelines, and appointment readiness." },
-  { icon: PlaneIcon, title: "Pre-Departure Support", text: "We prepare students for travel, accommodation planning, insurance, arrival expectations, and student life in the Netherlands." },
+const valueProps = [
+  { icon: CompassIcon, title: "Personalised guidance", text: "Every student receives a clear, individual plan — not a generic checklist." },
+  { icon: FileCheckIcon, title: "Admissions coordination", text: "We help with applications, documents, offer letters, and every deadline." },
+  { icon: ShieldIcon, title: "End-to-end visa support", text: "Practical guidance through visa documentation, financial evidence, and timelines." },
+  { icon: HomeIcon, title: "Accommodation & arrival", text: "Help planning housing, insurance, and a smooth first arrival in the Netherlands." },
+  { icon: HeartIcon, title: "One-to-one mentoring", text: "A real person who knows your case and answers your questions, start to finish." },
+  { icon: CheckCircleIcon, title: "Transparent process", text: "Clear stages, honest advice, and no hidden fees — confirmed in your offer letter." },
+];
+
+const processSteps = [
+  { title: "Eligibility review", text: "We review your background and goals and confirm the right pathway for you." },
+  { title: "Programme selection", text: "Choose your programme and intake with guidance from our admissions team." },
+  { title: "Application preparation", text: "We prepare your documents, checklist, and application together." },
+  { title: "Admission & offer", text: "We submit your application and support you through to your offer letter." },
+  { title: "Payment & visa guidance", text: "Clear guidance on tuition payment and visa documentation." },
+  { title: "Pre-departure & arrival", text: "A briefing and arrival plan so you land in the Netherlands prepared." },
+];
+
+const stats = [
+  { value: "2", label: "Pathway programmes" },
+  { value: "6", label: "Dutch universities in our network" },
+  { value: "4 days", label: "Admissions response commitment" },
+  { value: "360°", label: "Support — application to arrival" },
+];
+
+/* PLACEHOLDER — replace with REAL, verified student testimonials before relying on this section. */
+const testimonials = [
+  { quote: "[Add a real student testimonial here once you have permission to publish it.]", name: "Student name", detail: "Programme · Country" },
+  { quote: "[Add a real student testimonial here once you have permission to publish it.]", name: "Student name", detail: "Programme · Country" },
+  { quote: "[Add a real student testimonial here once you have permission to publish it.]", name: "Student name", detail: "Programme · Country" },
+];
+
+const faqs = [
+  { q: "Who are the pathway programmes for?", a: "They are designed for international students who want to strengthen their academic English and study skills before progressing into higher education in the Netherlands." },
+  { q: "Do you guarantee a university place or a visa?", a: "No organisation can guarantee admission or a visa — final decisions rest with universities and the Dutch authorities. We prepare you thoroughly and support every step to give you the strongest possible application." },
+  { q: "What does the tuition fee cover?", a: "The pathway programme tuition is €12,000. Your official offer letter always confirms the final payment details and what is included." },
+  { q: "When can I start?", a: "The International Foundation Programme has a September intake. English Academic Preparation offers flexible start points — contact our admissions team for current dates." },
+  { q: "Will you help with my visa and accommodation?", a: "Yes. We provide practical guidance for visa documentation and financial evidence, and help you plan accommodation and arrival." },
+  { q: "How quickly will you respond to my application?", a: "Our admissions team reviews new applications and aims to contact you within four business working days." },
+];
+
+const universities = [
+  "Leiden University", "University of Amsterdam", "Erasmus University Rotterdam",
+  "Vrije Universiteit Amsterdam", "Tilburg University", "The Hague University of Applied Sciences",
 ];
 
 const fees = [
-  { item: "Pathway Programme Tuition Fee", amount: "€12,000", note: "Total tuition fee" },
-  { item: "Initial Payment", amount: "€3,000", note: "Due before June 30, 2026" },
-  { item: "Remaining Balance", amount: "€9,000", note: "Due by July 31, 2026" },
-  { item: "Early Full-Payment Discount", amount: "5%", note: "For full tuition payment before June 30, 2026" },
+  { item: "Pathway Programme Tuition", amount: "€12,000", note: "Total programme tuition fee" },
+  { item: "Initial Payment", amount: "€3,000", note: "Due before 30 June 2026" },
+  { item: "Remaining Balance", amount: "€9,000", note: "Due by 31 July 2026" },
+  { item: "Early Full-Payment Discount", amount: "5%", note: "Full payment before 30 June 2026" },
 ];
 
 const visaSteps = [
-  "Receive conditional or final admission offer",
+  "Receive your conditional or final admission offer",
   "Pay the required tuition deposit or agreed programme payment",
-  "Prepare passport, academic documents, financial evidence, and required forms",
+  "Prepare passport, academic documents, and financial evidence",
   "Submit visa and residence-permit documentation through the academy process",
-  "Complete embassy or appointment requirements when applicable",
-  "Receive visa decision and prepare for travel to the Netherlands",
+  "Complete embassy or appointment requirements where applicable",
+  "Receive your visa decision and prepare to travel",
 ];
 
-const universityPartners = [
-  "Leiden University",
-  "University of Amsterdam",
-  "Erasmus University Rotterdam",
-  "Vrije Universiteit Amsterdam",
-  "Tilburg University",
-  "The Hague University of Applied Sciences",
-];
+/* ------------------------------ FAQ accordion ----------------------------- */
+function FaqItem({ faq, isOpen, onToggle }) {
+  return (
+    <div className="border-b border-slate-200">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="flex w-full items-center justify-between gap-6 py-6 text-left"
+      >
+        <span className="font-display text-lg font-semibold text-slate-900 md:text-xl">{faq.q}</span>
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+          {isOpen ? <MinusIcon className="h-4 w-4" /> : <PlusIcon className="h-4 w-4" />}
+        </span>
+      </button>
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="overflow-hidden"
+      >
+        <p className="pb-6 pr-14 leading-7 text-slate-600">{faq.a}</p>
+      </motion.div>
+    </div>
+  );
+}
 
-const process = [
-  "Initial eligibility review",
-  "Programme and intake selection",
-  "Document checklist and application preparation",
-  "Admission submission and offer follow-up",
-  "Payment and visa-document guidance",
-  "Pre-departure briefing and arrival planning",
-];
-
+/* =============================== MAIN PAGE ================================ */
 export default function PathwaysAcademyWebsite() {
   const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [openFaq, setOpenFaq] = useState(0);
 
-  const scrollToSection = (sectionId) => {
-    const section = document.getElementById(sectionId);
-    if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleSubmit = async (event) => {
@@ -158,10 +244,8 @@ export default function PathwaysAcademyWebsite() {
       programme: form.programme.value,
       message: form.message.value.trim(),
     };
-
     setStatus("loading");
     setErrorMsg("");
-
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -169,9 +253,7 @@ export default function PathwaysAcademyWebsite() {
         body: JSON.stringify(payload),
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong. Please try again.");
-      }
+      if (!response.ok) throw new Error(data.error || "Something went wrong. Please try again.");
       setStatus("success");
       form.reset();
     } catch (error) {
@@ -181,267 +263,498 @@ export default function PathwaysAcademyWebsite() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
+    <div className="min-h-screen bg-[#060A16] text-white">
+      {/* ------------------------------- Header ------------------------------ */}
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#060A16]/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Logo />
-          <nav className="hidden items-center gap-7 text-sm text-slate-300 lg:flex">
-            <button type="button" onClick={() => scrollToSection("about")} className="transition hover:text-white">About</button>
-            <button type="button" onClick={() => scrollToSection("programmes")} className="transition hover:text-white">Programmes</button>
-            <button type="button" onClick={() => scrollToSection("fees")} className="transition hover:text-white">Fees</button>
-            <button type="button" onClick={() => scrollToSection("visa")} className="transition hover:text-white">Visa</button>
-            <button type="button" onClick={() => scrollToSection("admissions")} className="transition hover:text-white">Admissions</button>
-            <button type="button" onClick={() => scrollToSection("contact")} className="transition hover:text-white">Contact</button>
+          <button type="button" onClick={() => scrollTo("top")} aria-label="Pathways Academy home">
+            <Logo />
+          </button>
+          <nav className="hidden items-center gap-8 text-sm text-slate-300 lg:flex">
+            {navLinks.map((link) => (
+              <button key={link.id} type="button" onClick={() => scrollTo(link.id)} className="transition hover:text-white">
+                {link.label}
+              </button>
+            ))}
           </nav>
-          <button type="button" onClick={() => scrollToSection("contact")} className="inline-flex items-center justify-center rounded-full bg-[#F97343] px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-[#FB8C66]">Apply Now</button>
+          <button
+            type="button"
+            onClick={() => scrollTo("apply")}
+            className="inline-flex items-center gap-2 rounded-full bg-[#F97343] px-5 py-2.5 text-sm font-semibold text-[#060A16] shadow-lg shadow-[#F97343]/20 transition hover:-translate-y-0.5 hover:bg-[#FB8C66]"
+          >
+            Apply Now
+          </button>
         </div>
       </header>
 
-      <main>
+      <main id="top">
+        {/* -------------------------------- Hero ------------------------------ */}
         <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#F97343]/20 via-slate-950 to-slate-950" />
-          <div className="relative mx-auto grid max-w-7xl gap-12 px-6 py-24 lg:grid-cols-[1.05fr_0.95fr] lg:py-32">
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="flex flex-col justify-center">
-              <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-[#FB8C66]/30 bg-[#FB8C66]/10 px-4 py-2 text-sm text-[#FDB39A]">
-                <GlobeIcon className="h-4 w-4" />
-                International pathway academy in the Netherlands
-              </div>
-              <h1 className="max-w-4xl text-5xl font-semibold tracking-tight text-white md:text-7xl">
-                Prepare for university success in the Netherlands.
-              </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300">
-                Pathways Academy delivers pathway education, academic preparation, English-language readiness, and progression support for students entering higher education in the Netherlands.
-              </p>
-              <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-                <button type="button" onClick={() => scrollToSection("contact")} className="inline-flex h-12 items-center justify-center rounded-full bg-[#F97343] px-7 text-base font-semibold text-slate-950 transition hover:bg-[#FB8C66]">
-                  Start Your Application <ArrowRightIcon className="ml-2 h-5 w-5" />
-                </button>
-                <button type="button" onClick={() => scrollToSection("programmes")} className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 text-base text-white transition hover:bg-white/10">
-                  View Programmes
-                </button>
-              </div>
-              <div className="mt-10 grid max-w-2xl grid-cols-3 gap-4 text-sm text-slate-300">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4"><p className="text-2xl font-semibold text-white">NL</p><p>Netherlands focus</p></div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4"><p className="text-2xl font-semibold text-white">2</p><p>Main pathway routes</p></div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4"><p className="text-2xl font-semibold text-white">360</p><p>Student support</p></div>
-              </div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="relative">
-              <div className="absolute -inset-4 rounded-[2rem] bg-[#F97343]/20 blur-3xl" />
-              <Card className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-2xl backdrop-blur-xl">
-                <CardContent className="p-0">
-                  <div className="border-b border-white/10 bg-white/10 p-7">
-                    <Logo compact />
-                    <h2 className="mt-6 text-3xl font-semibold text-white">Your academic route from application to arrival.</h2>
-                    <p className="mt-3 leading-7 text-slate-300">Clear admissions steps, pathway preparation, and practical guidance for studying in the Netherlands.</p>
-                  </div>
-                  <div className="space-y-4 p-6">
-                    {process.slice(0, 4).map((item, index) => (
-                      <div key={item} className="flex gap-4 rounded-2xl border border-white/10 bg-slate-950/50 p-4">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#F97343] font-semibold text-slate-950">{index + 1}</div>
-                        <p className="font-medium text-white">{item}</p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-        </section>
-
-        <section id="about" className="bg-white px-6 py-24 text-slate-950">
-          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(249,115,67,0.22),_transparent_55%)]" />
+          <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:py-28">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#E86233]">About Pathways Academy</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">A pathway academy for university preparation in the Netherlands.</h2>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#FB8C66]/30 bg-[#FB8C66]/10 px-4 py-2 text-sm text-[#FDB39A]"
+              >
+                <GlobeIcon className="h-4 w-4" />
+                International pathway academy · The Netherlands
+              </motion.div>
+              <motion.h1
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.05 }}
+                className="font-display text-5xl font-semibold leading-[1.05] tracking-tight text-white md:text-7xl"
+              >
+                Your pathway to a future <span className="text-[#FB8C66]">in the Netherlands.</span>
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.12 }}
+                className="mt-7 max-w-xl text-lg leading-8 text-slate-300"
+              >
+                For ambitious students from around the world, Pathways Academy turns the dream of a European education into a clear, guided journey — from your first question to your arrival on campus.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.19 }}
+                className="mt-9 flex flex-col gap-4 sm:flex-row"
+              >
+                <button
+                  type="button"
+                  onClick={() => scrollTo("apply")}
+                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#F97343] px-8 py-3.5 text-base font-semibold text-[#060A16] shadow-xl shadow-[#F97343]/25 transition hover:-translate-y-0.5 hover:bg-[#FB8C66]"
+                >
+                  Start your application
+                  <ArrowRightIcon className="h-5 w-5 transition group-hover:translate-x-1" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollTo("programmes")}
+                  className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-8 py-3.5 text-base text-white transition hover:bg-white/10"
+                >
+                  Explore programmes
+                </button>
+              </motion.div>
+              <div className="mt-12 grid max-w-xl grid-cols-3 gap-4">
+                {heroStats.map((stat, i) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3 + i * 0.08 }}
+                    className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                  >
+                    <p className="font-display text-2xl font-semibold text-white">{stat.value}</p>
+                    <p className="mt-1 text-xs leading-5 text-slate-400">{stat.label}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-            <div className="space-y-6 text-lg leading-8 text-slate-700">
-              <p>Pathways Academy is an international academy based in the Netherlands, focused on pathway education and university preparation for students progressing into Dutch higher education institutions.</p>
-              <p>Our academy model combines academic preparation, admissions coordination, English-language readiness, and student support to help learners transition confidently into university-level education in the Netherlands.</p>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="relative"
+            >
+              <div className="absolute -inset-6 rounded-[2.5rem] bg-[#F97343]/20 blur-3xl" />
+              <Photo src={photos.hero} alt="International students celebrating graduation" className="relative h-[30rem] w-full rounded-[2rem] border border-white/10 shadow-2xl" />
+              <div className="absolute -bottom-6 -left-6 hidden rounded-2xl border border-white/10 bg-[#0B1120]/95 p-5 shadow-xl backdrop-blur-xl sm:block">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#F97343] text-[#060A16]">
+                    <CheckCircleIcon className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-white">Guided every step</p>
+                    <p className="text-xs text-slate-400">From application to arrival</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ----------------------- University network bar --------------------- */}
+        <section className="border-y border-white/10 bg-white/[0.03]">
+          <div className="mx-auto max-w-7xl px-6 py-8">
+            <p className="text-center text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">
+              Preparing students for progression across leading Dutch universities
+            </p>
+            <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 text-center md:grid-cols-3 lg:grid-cols-6">
+              {universities.map((u) => (
+                <p key={u} className="text-sm font-medium text-slate-300">{u}</p>
+              ))}
             </div>
           </div>
         </section>
 
-        <section id="programmes" className="px-6 py-24">
+        {/* --------------------------- Why Netherlands ------------------------ */}
+        <section id="netherlands" className="px-6 py-24">
           <div className="mx-auto max-w-7xl">
-            <div className="mx-auto max-w-3xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#FB8C66]">Programmes</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Pathway and academic preparation options</h2>
-              <p className="mt-6 text-lg leading-8 text-slate-300">Our programmes are designed to prepare students for university-level study through academic skills, English-language development, and progression-focused support.</p>
+            <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+              <Reveal>
+                <Photo src={photos.netherlands} alt="A city in the Netherlands" className="h-[26rem] w-full rounded-[2rem] border border-white/10" />
+              </Reveal>
+              <div>
+                <Reveal>
+                  <Eyebrow>Why the Netherlands</Eyebrow>
+                  <h2 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl">
+                    A place to study, grow, and belong.
+                  </h2>
+                  <p className="mt-5 max-w-xl text-lg leading-8 text-slate-300">
+                    The Netherlands is one of the world's most welcoming destinations for international students — combining academic excellence with a safe, open, English-friendly society.
+                  </p>
+                </Reveal>
+                <div className="mt-9 grid gap-4 sm:grid-cols-2">
+                  {whyNetherlands.map((item, i) => (
+                    <Reveal key={item.title} delay={i * 0.07}>
+                      <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition hover:-translate-y-1 hover:border-[#F97343]/40">
+                        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#F97343]/15 text-[#FB8C66]">
+                          <item.icon className="h-5 w-5" />
+                        </span>
+                        <h3 className="mt-4 font-display text-lg font-semibold text-white">{item.title}</h3>
+                        <p className="mt-2 text-sm leading-6 text-slate-400">{item.text}</p>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
             </div>
+          </div>
+        </section>
+
+        {/* ------------------------------ Programmes -------------------------- */}
+        <section id="programmes" className="bg-white/[0.03] px-6 py-24">
+          <div className="mx-auto max-w-7xl">
+            <Reveal className="mx-auto max-w-3xl text-center">
+              <Eyebrow>Programmes</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+                Two routes, one destination.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-300">
+                Whichever route fits your goals, every programme is built to prepare you for university-level study with confidence.
+              </p>
+            </Reveal>
             <div className="mt-14 grid gap-6 lg:grid-cols-2">
-              {programmes.map((programme) => (
-                <Card key={programme.title} className="rounded-3xl border border-white/10 bg-white/5 text-white">
-                  <CardContent className="p-8">
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#FB8C66]">{programme.subtitle}</p>
-                    <h3 className="mt-4 text-3xl font-semibold">{programme.title}</h3>
-                    <p className="mt-5 leading-8 text-slate-300">{programme.description}</p>
-                    <div className="mt-7 grid gap-3">
+              {programmes.map((programme, i) => (
+                <Reveal key={programme.title} delay={i * 0.1}>
+                  <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-[#0B1120] p-8 transition hover:-translate-y-1 hover:border-[#F97343]/40">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FB8C66]">{programme.subtitle}</p>
+                    <h3 className="mt-3 font-display text-2xl font-semibold text-white md:text-3xl">{programme.title}</h3>
+                    <p className="mt-4 leading-7 text-slate-300">{programme.description}</p>
+                    <div className="mt-6 grid gap-2.5">
                       {programme.facts.map((fact) => (
-                        <div key={fact} className="flex gap-3 rounded-2xl bg-white/5 p-4">
-                          <CheckCircleIcon className="mt-1 h-5 w-5 shrink-0 text-[#FB8C66]" />
-                          <p className="text-slate-200">{fact}</p>
+                        <div key={fact} className="flex items-center gap-3 text-sm text-slate-200">
+                          <CheckIcon className="h-4 w-4 shrink-0 text-[#FB8C66]" />
+                          {fact}
                         </div>
                       ))}
                     </div>
-                  </CardContent>
-                </Card>
+                    <button
+                      type="button"
+                      onClick={() => scrollTo("apply")}
+                      className="group mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#FB8C66]"
+                    >
+                      Apply for this programme
+                      <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
+                    </button>
+                  </div>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="bg-slate-950 px-6 py-20">
-          <div className="mx-auto max-w-7xl rounded-[2rem] border border-white/10 bg-white/5 p-10">
-            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-              <div className="max-w-2xl">
-                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#FB8C66]">University Network</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white md:text-5xl">Pathway preparation aligned with leading Dutch universities.</h2>
-                <p className="mt-5 text-lg leading-8 text-slate-300">Our academy prepares students for progression opportunities across the Dutch higher-education environment through pathway preparation, English-language readiness, and academic support.</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                {universityPartners.map((university) => (
-                  <div key={university} className="flex min-h-[90px] items-center justify-center rounded-2xl border border-white/10 bg-white/10 px-6 py-5 text-center text-sm font-semibold text-white backdrop-blur-sm">
-                    {university}
+        {/* --------------------------- Why Pathways --------------------------- */}
+        <section id="why" className="px-6 py-24">
+          <div className="mx-auto max-w-7xl">
+            <Reveal className="mx-auto max-w-3xl text-center">
+              <Eyebrow>Why Pathways Academy</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+                Studying abroad is a big step. You won't take it alone.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-300">
+                We combine academic preparation with genuine, personal support — so every student feels informed, prepared, and confident.
+              </p>
+            </Reveal>
+            <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {valueProps.map((prop, i) => (
+                <Reveal key={prop.title} delay={(i % 3) * 0.07}>
+                  <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-7 transition hover:-translate-y-1 hover:border-[#F97343]/40">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F97343] text-[#060A16]">
+                      <prop.icon className="h-6 w-6" />
+                    </span>
+                    <h3 className="mt-5 font-display text-lg font-semibold text-white">{prop.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-400">{prop.text}</p>
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="services" className="bg-slate-100 px-6 py-24 text-slate-950">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#E86233]">Student Support</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Academic and student support before, during, and after application.</h2>
-              </div>
-              <div className="grid gap-5 md:grid-cols-2">
-                {services.map(({ icon: Icon, title, text }) => (
-                  <Card key={title} className="rounded-3xl border-0 bg-white shadow-sm">
-                    <CardContent className="p-7">
-                      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F97343] text-slate-950"><Icon /></div>
-                      <h3 className="text-xl font-semibold">{title}</h3>
-                      <p className="mt-4 leading-7 text-slate-700">{text}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="fees" className="px-6 py-24">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#FB8C66]">Fees & Payment Plan</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Transparent pathway programme tuition.</h2>
-                <p className="mt-6 text-lg leading-8 text-slate-300">The total tuition fee for the Pathway Programme is €12,000. Students should always confirm final payment instructions in their official offer letter.</p>
-                <div className="mt-6 rounded-3xl border border-[#FB8C66]/30 bg-[#FB8C66]/10 p-6 text-[#FFD8CC]">
-                  <p className="font-semibold">Payment plan</p>
-                  <p className="mt-2 leading-7">Students pay an initial €3,000 before June 30, 2026. The remaining balance is due by July 31, 2026. Students who pay the full tuition before June 30, 2026 receive a 5% discount.</p>
-                </div>
-              </div>
-              <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5">
-                {fees.map((fee, index) => (
-                  <div key={fee.item} className={`grid gap-3 p-6 md:grid-cols-[1fr_140px_150px] ${index !== fees.length - 1 ? "border-b border-white/10" : ""}`}>
-                    <p className="font-semibold text-white">{fee.item}</p>
-                    <p className="text-2xl font-semibold text-[#FB8C66]">{fee.amount}</p>
-                    <p className="text-sm text-slate-400">{fee.note}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="visa" className="bg-slate-100 px-6 py-24 text-slate-950">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#E86233]">Visa Process</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Clear guidance for the Netherlands student visa process.</h2>
-                <p className="mt-6 text-lg leading-8 text-slate-700">Pathways Academy supports students with visa-document preparation, financial-document guidance, deadline planning, and pre-departure readiness. Final visa decisions are made by the relevant Dutch authorities.</p>
-                <div className="mt-6 rounded-3xl bg-white p-6 shadow-sm">
-                  <p className="font-semibold text-slate-950">Important note</p>
-                  <p className="mt-2 leading-7 text-slate-700">Visa requirements can vary by nationality, intake, and official regulations. Students should begin preparation early and follow the document checklist provided for their application.</p>
-                </div>
-              </div>
-              <div className="grid gap-4">
-                {visaSteps.map((step, index) => (
-                  <div key={step} className="flex gap-4 rounded-3xl bg-white p-5 shadow-sm">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 font-semibold text-white">{index + 1}</div>
-                    <p className="pt-2 font-medium text-slate-800">{step}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="admissions" className="bg-white px-6 py-24 text-slate-950">
-          <div className="mx-auto max-w-7xl">
-            <div className="mx-auto max-w-3xl text-center">
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#E86233]">Admissions Process</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">A clear step-by-step process from application to departure.</h2>
-            </div>
-            <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {process.map((item, index) => (
-                <div key={item} className="rounded-3xl bg-slate-100 p-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-lg font-semibold text-white">{index + 1}</div>
-                  <p className="mt-5 text-lg font-semibold text-slate-900">{item}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
+        {/* ------------------------------ Process ----------------------------- */}
+        <section id="process" className="bg-[#FBF8F3] px-6 py-24 text-slate-950">
+          <div className="mx-auto max-w-7xl">
+            <Reveal className="mx-auto max-w-3xl text-center">
+              <Eyebrow dark>How it works</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+                A clear journey, from first question to first day.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-600">
+                No confusion, no guesswork. Six guided steps take you from your application to your arrival in the Netherlands.
+              </p>
+            </Reveal>
+            <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {processSteps.map((step, i) => (
+                <Reveal key={step.title} delay={(i % 3) * 0.07}>
+                  <div className="h-full rounded-3xl border border-slate-200 bg-white p-7 shadow-sm">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 font-display text-lg font-semibold text-white">
+                      {i + 1}
+                    </div>
+                    <h3 className="mt-5 font-display text-xl font-semibold text-slate-900">{step.title}</h3>
+                    <p className="mt-2 leading-6 text-slate-600">{step.text}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* -------------------------- Student support ------------------------- */}
         <section className="px-6 py-24">
-          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-3">
-            <Card className="rounded-3xl border border-white/10 bg-white/5 text-white">
-              <CardContent className="p-8">
-                <BuildingIcon className="h-9 w-9 text-[#FB8C66]" />
-                <h3 className="mt-5 text-2xl font-semibold">Study in The Hague</h3>
-                <p className="mt-4 leading-7 text-slate-300">The Hague offers an international, student-friendly environment with access to business, law, governance, technology, and culture.</p>
-              </CardContent>
-            </Card>
-            <Card className="rounded-3xl border border-white/10 bg-white/5 text-white">
-              <CardContent className="p-8">
-                <CalendarIcon className="h-9 w-9 text-[#FB8C66]" />
-                <h3 className="mt-5 text-2xl font-semibold">Intakes & Deadlines</h3>
-                <p className="mt-4 leading-7 text-slate-300">Students should plan carefully for intake dates, document preparation, payment deadlines, and visa timelines.</p>
-              </CardContent>
-            </Card>
-            <Card className="rounded-3xl border border-white/10 bg-white/5 text-white">
-              <CardContent className="p-8">
-                <MessageIcon className="h-9 w-9 text-[#FB8C66]" />
-                <h3 className="mt-5 text-2xl font-semibold">Admissions Support</h3>
-                <p className="mt-4 leading-7 text-slate-300">Receive academic guidance, programme information, and pathway support from our admissions and student-success team.</p>
-              </CardContent>
-            </Card>
+          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+            <div>
+              <Reveal>
+                <Eyebrow>Student support</Eyebrow>
+                <h2 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl">
+                  Real people, beside you the whole way.
+                </h2>
+                <p className="mt-5 max-w-xl text-lg leading-8 text-slate-300">
+                  Behind every application is a student with hopes, questions, and a family counting on them. Our team treats your journey with the care it deserves — before, during, and after you apply.
+                </p>
+              </Reveal>
+              <div className="mt-8 grid gap-3">
+                {[
+                  "Academic guidance on pathways and entry requirements",
+                  "Admissions coordination, documents, and deadlines",
+                  "Visa documentation and financial-evidence preparation",
+                  "Accommodation planning and pre-departure briefing",
+                ].map((item, i) => (
+                  <Reveal key={item} delay={i * 0.06}>
+                    <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                      <CheckCircleIcon className="h-5 w-5 shrink-0 text-[#FB8C66]" />
+                      <span className="text-sm text-slate-200">{item}</span>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+            <Reveal delay={0.1}>
+              <Photo src={photos.support} alt="Pathways Academy advisor supporting a student" className="h-[28rem] w-full rounded-[2rem] border border-white/10" />
+            </Reveal>
           </div>
         </section>
 
-        <section id="contact" className="bg-white px-6 py-24 text-slate-950">
-          <div className="mx-auto max-w-7xl rounded-[2rem] bg-[#F97343] p-8 md:p-14">
-            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        {/* ------------------------------- Stats ------------------------------ */}
+        <section className="px-6 pb-8">
+          <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-[#F97343]/15 via-[#0B1120] to-[#0B1120] p-10 md:p-14">
+            <Reveal className="max-w-2xl">
+              <Eyebrow>At a glance</Eyebrow>
+              <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight text-white md:text-4xl">
+                Focused entirely on your route to the Netherlands.
+              </h2>
+            </Reveal>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {stats.map((stat, i) => (
+                <Reveal key={stat.label} delay={i * 0.07}>
+                  <div>
+                    <p className="font-display text-4xl font-semibold text-[#FB8C66] md:text-5xl">{stat.value}</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-300">{stat.label}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------------------- Testimonials -------------------------- */}
+        <section className="px-6 py-24">
+          <div className="mx-auto max-w-7xl">
+            <Reveal className="mx-auto max-w-3xl text-center">
+              <Eyebrow>Student voices</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+                Stories from our students.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-300">
+                Real experiences from students who began their journey with Pathways Academy.
+              </p>
+            </Reveal>
+            <div className="mt-14 grid gap-6 lg:grid-cols-3">
+              {testimonials.map((t, i) => (
+                <Reveal key={i} delay={i * 0.08}>
+                  <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/[0.04] p-8">
+                    <div className="flex gap-1 text-[#FB8C66]">
+                      {[0, 1, 2, 3, 4].map((s) => <StarIcon key={s} className="h-4 w-4" />)}
+                    </div>
+                    <p className="mt-5 flex-1 leading-7 text-slate-200">{t.quote}</p>
+                    <div className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
+                      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#F97343]/20 font-display font-semibold text-[#FB8C66]">PA</span>
+                      <div>
+                        <p className="text-sm font-semibold text-white">{t.name}</p>
+                        <p className="text-xs text-slate-400">{t.detail}</p>
+                      </div>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* -------------------------------- Fees ------------------------------ */}
+        <section id="fees" className="bg-white/[0.03] px-6 py-24">
+          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+            <Reveal>
+              <Eyebrow>Fees & payment</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl">
+                Transparent tuition. No surprises.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-300">
+                The total tuition for the Pathway Programme is €12,000. Final payment instructions are always confirmed in your official offer letter.
+              </p>
+              <div className="mt-6 rounded-2xl border border-[#FB8C66]/25 bg-[#FB8C66]/10 p-6">
+                <p className="font-semibold text-[#FFD8CC]">Payment plan</p>
+                <p className="mt-2 leading-7 text-[#FFD8CC]/85">
+                  Pay €3,000 before 30 June 2026, with the balance due by 31 July 2026. Pay your full tuition before 30 June 2026 and receive a 5% discount.
+                </p>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#0B1120]">
+                {fees.map((fee, i) => (
+                  <div key={fee.item} className={`grid items-center gap-3 p-6 sm:grid-cols-[1fr_auto] ${i !== fees.length - 1 ? "border-b border-white/10" : ""}`}>
+                    <div>
+                      <p className="font-semibold text-white">{fee.item}</p>
+                      <p className="mt-1 text-sm text-slate-400">{fee.note}</p>
+                    </div>
+                    <p className="font-display text-2xl font-semibold text-[#FB8C66]">{fee.amount}</p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* -------------------------------- Visa ------------------------------ */}
+        <section id="visa" className="px-6 py-24">
+          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+            <Reveal>
+              <Eyebrow>Visa guidance</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl">
+                Clear support through the visa process.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-300">
+                We guide you through visa documentation, financial evidence, and deadlines. Final visa decisions are made by the relevant Dutch authorities — we make sure you are prepared.
+              </p>
+              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+                <p className="font-semibold text-white">Start early</p>
+                <p className="mt-2 leading-7 text-slate-400">
+                  Requirements vary by nationality and intake. Beginning preparation early gives your application the best chance of a smooth outcome.
+                </p>
+              </div>
+            </Reveal>
+            <div className="grid gap-4">
+              {visaSteps.map((step, i) => (
+                <Reveal key={step} delay={i * 0.05}>
+                  <div className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F97343] font-display font-semibold text-[#060A16]">
+                      {i + 1}
+                    </div>
+                    <p className="pt-1.5 font-medium text-slate-200">{step}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* -------------------------------- FAQ ------------------------------- */}
+        <section id="faq" className="bg-[#FBF8F3] px-6 py-24 text-slate-950">
+          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+            <Reveal>
+              <Eyebrow dark>FAQ</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
+                Questions, answered honestly.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-600">
+                Still unsure about something? Our admissions team is always happy to help.
+              </p>
+              <a
+                href="mailto:admissions@pathwaysacademy.nl"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#E8552B]"
+              >
+                <MailIcon className="h-4 w-4" />
+                admissions@pathwaysacademy.nl
+              </a>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div className="rounded-[2rem] border border-slate-200 bg-white px-7 md:px-9">
+                {faqs.map((faq, i) => (
+                  <FaqItem
+                    key={faq.q}
+                    faq={faq}
+                    isOpen={openFaq === i}
+                    onToggle={() => setOpenFaq(openFaq === i ? -1 : i)}
+                  />
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ------------------------- Apply / contact -------------------------- */}
+        <section id="apply" className="px-6 py-24">
+          <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#F97343] via-[#F97343] to-[#E8552B] p-8 md:p-14">
+            <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-800">Apply Now</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Ready to begin your pathway to the Netherlands?</h2>
-                <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-800">Complete the application form and our admissions team will review your details and contact you within four business working days.</p>
-                <p className="mt-4 text-sm font-medium text-slate-800">Prefer email? Write to <a href="mailto:admissions@pathwaysacademy.nl" className="underline decoration-slate-950/40 underline-offset-4 hover:text-slate-950">admissions@pathwaysacademy.nl</a></p>
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-900/70">Apply now</p>
+                <h2 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-slate-950 md:text-5xl">
+                  Begin your pathway today.
+                </h2>
+                <p className="mt-5 max-w-md text-lg leading-8 text-slate-900/85">
+                  Tell us a little about yourself. Our admissions team will review your details and contact you within four business working days.
+                </p>
+                <div className="mt-8 space-y-3">
+                  <div className="flex items-center gap-3 text-slate-900">
+                    <MailIcon className="h-5 w-5" />
+                    <a href="mailto:admissions@pathwaysacademy.nl" className="font-medium hover:underline">admissions@pathwaysacademy.nl</a>
+                  </div>
+                  <div className="flex items-center gap-3 text-slate-900">
+                    <PhoneIcon className="h-5 w-5" />
+                    <a href="tel:+31703052786" className="font-medium hover:underline">+31 703 052 786</a>
+                  </div>
+                  <div className="flex items-center gap-3 text-slate-900">
+                    <HomeIcon className="h-5 w-5" />
+                    <span className="font-medium">Johanna Westerdijkplein 75, 2521 EN The Hague</span>
+                  </div>
+                </div>
               </div>
 
-              <div className="rounded-[1.75rem] bg-white p-6 shadow-xl md:p-8">
+              <div className="rounded-[1.75rem] bg-white p-6 shadow-2xl md:p-8">
                 {status === "success" ? (
-                  <div className="flex flex-col items-center py-10 text-center">
-                    <CheckCircleIcon className="h-14 w-14 text-[#E86233]" />
-                    <h3 className="mt-5 text-2xl font-semibold text-slate-950">Application received</h3>
+                  <div className="flex flex-col items-center py-12 text-center">
+                    <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#F97343]/15 text-[#E8552B]">
+                      <CheckCircleIcon className="h-9 w-9" />
+                    </span>
+                    <h3 className="mt-5 font-display text-2xl font-semibold text-slate-950">Application received</h3>
                     <p className="mt-3 max-w-md leading-7 text-slate-600">
-                      Thank you for applying. A confirmation email has been sent to you. Our admissions team will contact you within four business working days.
+                      Thank you for applying. A confirmation email is on its way to you, and our admissions team will be in touch within four business working days.
                     </p>
                     <button
                       type="button"
@@ -456,39 +769,35 @@ export default function PathwaysAcademyWebsite() {
                     <div className="grid gap-1.5">
                       <label htmlFor="fullName" className="text-sm font-semibold text-slate-700">Full name</label>
                       <input id="fullName" name="fullName" type="text" required placeholder="Your full name"
-                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white" />
+                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white focus:ring-4 focus:ring-[#F97343]/15" />
                     </div>
                     <div className="grid gap-1.5">
                       <label htmlFor="email" className="text-sm font-semibold text-slate-700">Email address</label>
                       <input id="email" name="email" type="email" required placeholder="you@example.com"
-                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white" />
+                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white focus:ring-4 focus:ring-[#F97343]/15" />
                     </div>
                     <div className="grid gap-1.5">
                       <label htmlFor="whatsapp" className="text-sm font-semibold text-slate-700">WhatsApp number</label>
                       <input id="whatsapp" name="whatsapp" type="tel" required placeholder="+93 70 000 0000"
-                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white" />
+                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white focus:ring-4 focus:ring-[#F97343]/15" />
                     </div>
                     <div className="grid gap-1.5">
                       <label htmlFor="programme" className="text-sm font-semibold text-slate-700">Programme</label>
                       <select id="programme" name="programme" required defaultValue=""
-                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white">
+                        className="h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white focus:ring-4 focus:ring-[#F97343]/15">
                         <option value="" disabled>Select a programme</option>
-                        {programmes.map((programme) => (
-                          <option key={programme.title} value={programme.title}>{programme.title}</option>
-                        ))}
+                        {programmes.map((p) => <option key={p.title} value={p.title}>{p.title}</option>)}
                         <option value="Not sure yet">Not sure yet — please advise</option>
                       </select>
                     </div>
                     <div className="grid gap-1.5">
                       <label htmlFor="message" className="text-sm font-semibold text-slate-700">Comment / message</label>
                       <textarea id="message" name="message" rows={4} placeholder="Tell us anything that will help us support your application"
-                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white" />
+                        className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-[#F97343] focus:bg-white focus:ring-4 focus:ring-[#F97343]/15" />
                     </div>
-
                     {status === "error" && (
                       <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{errorMsg}</p>
                     )}
-
                     <button
                       type="submit"
                       disabled={status === "loading"}
@@ -507,34 +816,41 @@ export default function PathwaysAcademyWebsite() {
         </section>
       </main>
 
-      <footer className="border-t border-white/10 px-6 py-10">
+      {/* ------------------------------- Footer ------------------------------ */}
+      <footer className="border-t border-white/10 px-6 py-14">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 md:grid-cols-3">
             <div>
-              <Logo compact />
-              <p className="mt-4 text-sm leading-7 text-slate-400">Academic pathway programmes and university preparation in the Netherlands.</p>
+              <Logo />
+              <p className="mt-5 max-w-xs text-sm leading-7 text-slate-400">
+                Academic pathway programmes and university preparation for international students in the Netherlands.
+              </p>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#FB8C66]">Contact</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FB8C66]">Contact</h4>
               <div className="mt-4 space-y-3 text-sm text-slate-300">
                 <p>Johanna Westerdijkplein 75,<br />2521 EN The Hague</p>
-                <p><a href="tel:+31703052786" className="hover:text-white">+31 703 052 786</a><span className="text-slate-500"> — General enquiries</span></p>
-                <p><a href="tel:+31704457786" className="hover:text-white">+31 704 457 786</a><span className="text-slate-500"> — Current students</span></p>
+                <p><a href="tel:+31703052786" className="hover:text-white">+31 703 052 786</a><span className="text-slate-500"> · General enquiries</span></p>
+                <p><a href="tel:+31704457786" className="hover:text-white">+31 704 457 786</a><span className="text-slate-500"> · Current students</span></p>
                 <p><a href="mailto:admissions@pathwaysacademy.nl" className="hover:text-white">admissions@pathwaysacademy.nl</a></p>
               </div>
             </div>
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#FB8C66]">Quick Links</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FB8C66]">Explore</h4>
               <div className="mt-4 flex flex-col gap-3 text-sm text-slate-300">
-                <button type="button" onClick={() => scrollToSection("about")} className="text-left hover:text-white">About Pathways Academy</button>
-                <button type="button" onClick={() => scrollToSection("programmes")} className="text-left hover:text-white">Programmes</button>
-                <button type="button" onClick={() => scrollToSection("fees")} className="text-left hover:text-white">Tuition Fees</button>
-                <button type="button" onClick={() => scrollToSection("visa")} className="text-left hover:text-white">Visa Process</button>
-                <button type="button" onClick={() => scrollToSection("admissions")} className="text-left hover:text-white">Admissions Process</button>
+                {navLinks.map((link) => (
+                  <button key={link.id} type="button" onClick={() => scrollTo(link.id)} className="text-left hover:text-white">
+                    {link.label}
+                  </button>
+                ))}
+                <button type="button" onClick={() => scrollTo("apply")} className="text-left hover:text-white">Apply Now</button>
               </div>
             </div>
           </div>
-          <div className="mt-10 border-t border-white/10 pt-6 text-sm text-slate-500">© 2026 Pathways Academy. All rights reserved.</div>
+          <div className="mt-12 flex flex-col gap-2 border-t border-white/10 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+            <p>© 2026 Pathways Academy. All rights reserved.</p>
+            <p>The Hague · The Netherlands</p>
+          </div>
         </div>
       </footer>
     </div>
