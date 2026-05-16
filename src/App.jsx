@@ -168,11 +168,13 @@ const stats = [
   { value: "360°", label: "Support — application to arrival" },
 ];
 
-/* PLACEHOLDER — replace with REAL, verified student testimonials before relying on this section. */
-const testimonials = [
-  { quote: "[Add a real student testimonial here once you have permission to publish it.]", name: "Student name", detail: "Programme · Country" },
-  { quote: "[Add a real student testimonial here once you have permission to publish it.]", name: "Student name", detail: "Programme · Country" },
-  { quote: "[Add a real student testimonial here once you have permission to publish it.]", name: "Student name", detail: "Programme · Country" },
+const promises = [
+  { icon: CompassIcon, title: "Honest advice — always", text: "We tell you what is realistic, even when it is not what you hoped to hear. Your trust matters more than a quick yes." },
+  { icon: HeartIcon, title: "A real person beside you", text: "You are never a ticket number. One dedicated advisor knows your case and stays with you from first message to arrival." },
+  { icon: CheckCircleIcon, title: "No hidden fees, ever", text: "Every cost is explained clearly and confirmed in your official offer letter. No surprises, no pressure." },
+  { icon: FileCheckIcon, title: "We prepare you properly", text: "Universities and the Dutch authorities make the final decisions. Our job is to make sure your application is as strong as it can be." },
+  { icon: ShieldIcon, title: "We respond, fast", text: "We commit to replying to every application within four business working days — because waiting in uncertainty is hard." },
+  { icon: HomeIcon, title: "Support that continues", text: "Our care does not end when you are accepted. We help you prepare for arrival and settling into life in the Netherlands." },
 ];
 
 const faqs = [
@@ -610,37 +612,36 @@ export default function PathwaysAcademyWebsite() {
           </div>
         </section>
 
-        {/* ---------------------------- Testimonials -------------------------- */}
+        {/* --------------------------- Our promise ---------------------------- */}
         <section className="px-6 py-24">
           <div className="mx-auto max-w-7xl">
             <Reveal className="mx-auto max-w-3xl text-center">
-              <Eyebrow>Student voices</Eyebrow>
+              <Eyebrow>Our promise to you</Eyebrow>
               <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
-                Stories from our students.
+                Trust is earned. Here is how we earn yours.
               </h2>
               <p className="mt-5 text-lg leading-8 text-slate-300">
-                Real experiences from students who began their journey with Pathways Academy.
+                Choosing where to study abroad is one of the biggest decisions of your life. These are the commitments we make to every single student who comes to us.
               </p>
             </Reveal>
-            <div className="mt-14 grid gap-6 lg:grid-cols-3">
-              {testimonials.map((t, i) => (
-                <Reveal key={i} delay={i * 0.08}>
-                  <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/[0.04] p-8">
-                    <div className="flex gap-1 text-[#FB8C66]">
-                      {[0, 1, 2, 3, 4].map((s) => <StarIcon key={s} className="h-4 w-4" />)}
-                    </div>
-                    <p className="mt-5 flex-1 leading-7 text-slate-200">{t.quote}</p>
-                    <div className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
-                      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#F97343]/20 font-display font-semibold text-[#FB8C66]">PA</span>
-                      <div>
-                        <p className="text-sm font-semibold text-white">{t.name}</p>
-                        <p className="text-xs text-slate-400">{t.detail}</p>
-                      </div>
-                    </div>
+            <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {promises.map((promise, i) => (
+                <Reveal key={promise.title} delay={(i % 3) * 0.08}>
+                  <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/[0.04] p-8 transition hover:-translate-y-1 hover:border-[#F97343]/40">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F97343] text-[#060A16]">
+                      <promise.icon className="h-6 w-6" />
+                    </span>
+                    <h3 className="mt-5 font-display text-xl font-semibold text-white">{promise.title}</h3>
+                    <p className="mt-2 leading-7 text-slate-400">{promise.text}</p>
                   </div>
                 </Reveal>
               ))}
             </div>
+            <Reveal className="mt-10 text-center">
+              <p className="text-sm text-slate-500">
+                As we grow, this is where the real stories of our students will live — shared only with their permission.
+              </p>
+            </Reveal>
           </div>
         </section>
 
