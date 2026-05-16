@@ -527,6 +527,35 @@ export default function PathwaysAcademyWebsite() {
           </div>
         </section>
 
+        {/* ------------------------------ Mission ----------------------------- */}
+        <section id="about" className="bg-white/[0.03] px-6 py-24">
+          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+            <Reveal>
+              <Photo src={photos.campus} alt="Pathways Academy" className="h-[28rem] w-full rounded-[2rem] border border-white/10" />
+            </Reveal>
+            <div>
+              <Reveal>
+                <Eyebrow>Our mission</Eyebrow>
+                <h2 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl">
+                  Education should open doors — never create barriers.
+                </h2>
+                <div className="mt-6 space-y-5 text-lg leading-8 text-slate-300">
+                  <p>
+                    Pathways Academy was founded on one belief: an ambitious student should never be held back from a world-class education by confusion, distance, or a lack of honest guidance.
+                  </p>
+                  <p>
+                    For students from Afghanistan, South Asia, the Middle East and beyond, the road to a European university can feel overwhelming — unfamiliar systems, complex visa rules, and decisions that carry the hopes of an entire family. We exist to make that road clear, honest, and possible to walk.
+                  </p>
+                  <p>
+                    We are not a faceless agency. We are a team of people who guide each student personally — combining real academic preparation with genuine human support, from the very first question to the first day on campus in the Netherlands.
+                  </p>
+                </div>
+                <p className="mt-7 font-display text-lg italic text-[#FB8C66]">— The Pathways Academy team</p>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
         {/* ------------------------------ Process ----------------------------- */}
         <section id="process" className="bg-[#FBF8F3] px-6 py-24 text-slate-950">
           <div className="mx-auto max-w-7xl">
