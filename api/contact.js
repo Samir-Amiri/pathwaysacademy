@@ -17,6 +17,7 @@ module.exports = async function handler(req, res) {
     const key = process.env.RESEND_API_KEY || "";
     res.status(200).json({
       diagnostic: true,
+      build: "v3",
       functionRunning: true,
       hasResendKey: key.length > 0,
       keyLength: key.length,
