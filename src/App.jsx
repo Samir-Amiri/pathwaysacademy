@@ -816,7 +816,16 @@ export default function PathwaysAcademyWebsite() {
                 <p className="mt-5 max-w-md text-lg leading-8 text-slate-900/85">
                   Tell us a little about yourself. Our admissions team will review your details and contact you within four business working days.
                 </p>
-                <div className="mt-8 space-y-3">
+                <div className="mt-8 flex items-center gap-4 rounded-2xl bg-slate-950/10 p-4">
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-slate-950 font-display text-lg font-semibold text-white">LB</span>
+                  <div>
+                    <p className="font-display text-lg font-semibold text-slate-950">Liam Bakker</p>
+                    <p className="text-sm text-slate-900/75">International Admissions Officer</p>
+                    <p className="mt-0.5 text-sm text-slate-900/75">Your dedicated contact — Liam personally reviews new applications.</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 space-y-3">
                   <div className="flex items-center gap-3 text-slate-900">
                     <MailIcon className="h-5 w-5" />
                     <a href="mailto:admissions@pathwaysacademy.nl" className="font-medium hover:underline">admissions@pathwaysacademy.nl</a>
