@@ -7,12 +7,12 @@ import { motion } from "framer-motion";
    the layout gracefully falls back to a branded gradient.
 ---------------------------------------------------------------------------- */
 const photos = {
-  hero: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1400&q=80",
+  hero: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80",
   netherlands: "https://images.unsplash.com/photo-1558369981-f9ca78462e61?auto=format&fit=crop&w=1200&q=80",
   study: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
   campus: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80",
   students: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1200&q=80",
-  support: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80",
+  support: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1200&q=80",
 };
 
 /* ---------------------------------- Icons --------------------------------- */
@@ -56,15 +56,23 @@ function Reveal({ children, delay = 0, className = "" }) {
 }
 
 function Photo({ src, alt, className = "" }) {
+  const [failed, setFailed] = useState(false);
   return (
-    <div className={`relative overflow-hidden bg-gradient-to-br from-[#F97343]/40 via-slate-800 to-slate-950 ${className}`}>
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        onError={(e) => { e.currentTarget.style.opacity = 0; }}
-        className="h-full w-full object-cover transition-opacity duration-700"
-      />
+    <div className={`relative overflow-hidden bg-gradient-to-br from-[#F97343]/35 via-[#1B2438] to-[#0B1120] ${className}`}>
+      {!failed && (
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className="h-full w-full object-cover"
+        />
+      )}
+      {failed && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <LogoMark className="h-24 w-28 opacity-20" />
+        </div>
+      )}
     </div>
   );
 }
@@ -188,13 +196,32 @@ const fees = [
   { item: "Early Full-Payment Discount", amount: "5%", note: "Full payment before 30 June 2026" },
 ];
 
+const visaBasics = [
+  {
+    title: "The MVV — your entry visa",
+    text: "For most non-EU students, the MVV is a sticker placed in your passport that allows you to travel to the Netherlands. It is valid for 90 days from entry.",
+  },
+  {
+    title: "The VVR — your residence permit",
+    text: "The VVR (residence permit) is the card that allows you to live and study in the Netherlands for the duration of your programme.",
+  },
+  {
+    title: "The TEV procedure",
+    text: "Most students apply for both at once through the combined TEV procedure. Your recognised education institution submits the application to the IND on your behalf.",
+  },
+  {
+    title: "Proof of financial means",
+    text: "You will need to show sufficient funds for your stay — for the 2025–2026 year this is roughly €1,094 per month. Always confirm the current amount with the IND.",
+  },
+];
+
 const visaSteps = [
-  "Receive your conditional or final admission offer",
+  "Receive your conditional or final admission offer from your education institution",
   "Pay the required tuition deposit or agreed programme payment",
-  "Prepare passport, academic documents, and financial evidence",
-  "Submit visa and residence-permit documentation through the academy process",
-  "Complete embassy or appointment requirements where applicable",
-  "Receive your visa decision and prepare to travel",
+  "Gather your passport, academic documents, and proof of financial means",
+  "Your recognised institution submits the combined TEV application (MVV + VVR) to the IND",
+  "The IND assesses the application; collect your MVV at the Dutch embassy or consulate when approved",
+  "Travel to the Netherlands, register, and collect your residence permit (VVR) card",
 ];
 
 /* ------------------------------ FAQ accordion ----------------------------- */
@@ -653,33 +680,62 @@ export default function PathwaysAcademyWebsite() {
 
         {/* -------------------------------- Visa ------------------------------ */}
         <section id="visa" className="px-6 py-24">
-          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-            <Reveal>
-              <Eyebrow>Visa guidance</Eyebrow>
-              <h2 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-white md:text-5xl">
-                Clear support through the visa process.
+          <div className="mx-auto max-w-7xl">
+            <Reveal className="mx-auto max-w-3xl text-center">
+              <Eyebrow>Visa & residence permit</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+                Understanding your route to the Netherlands.
               </h2>
               <p className="mt-5 text-lg leading-8 text-slate-300">
-                We guide you through visa documentation, financial evidence, and deadlines. Final visa decisions are made by the relevant Dutch authorities — we make sure you are prepared.
+                The Dutch student immigration process is well-defined. Here is how it works — and how Pathways Academy helps you prepare for every part of it.
               </p>
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                <p className="font-semibold text-white">Start early</p>
-                <p className="mt-2 leading-7 text-slate-400">
-                  Requirements vary by nationality and intake. Beginning preparation early gives your application the best chance of a smooth outcome.
-                </p>
-              </div>
             </Reveal>
-            <div className="grid gap-4">
-              {visaSteps.map((step, i) => (
-                <Reveal key={step} delay={i * 0.05}>
-                  <div className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F97343] font-display font-semibold text-[#060A16]">
-                      {i + 1}
-                    </div>
-                    <p className="pt-1.5 font-medium text-slate-200">{step}</p>
+
+            <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {visaBasics.map((item, i) => (
+                <Reveal key={item.title} delay={(i % 4) * 0.07}>
+                  <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+                    <h3 className="font-display text-lg font-semibold text-white">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-400">{item.text}</p>
                   </div>
                 </Reveal>
               ))}
+            </div>
+
+            <div className="mt-12 grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+              <Reveal>
+                <h3 className="font-display text-2xl font-semibold text-white md:text-3xl">The step-by-step journey</h3>
+                <p className="mt-4 leading-7 text-slate-300">
+                  We guide you through documentation, financial evidence, and deadlines at every stage. Final visa decisions are always made by the Dutch authorities — our role is to make sure you are fully prepared.
+                </p>
+                <div className="mt-6 rounded-2xl border border-[#FB8C66]/25 bg-[#FB8C66]/10 p-6">
+                  <p className="font-semibold text-[#FFD8CC]">Always verify official requirements</p>
+                  <p className="mt-2 leading-7 text-[#FFD8CC]/85">
+                    Immigration rules and amounts change. Confirm the current requirements for your nationality on the official IND website before you apply.
+                  </p>
+                  <a
+                    href="https://ind.nl/en"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#FB8C66] hover:text-[#FDB39A]"
+                  >
+                    Visit the official IND website
+                    <ArrowRightIcon className="h-4 w-4" />
+                  </a>
+                </div>
+              </Reveal>
+              <div className="grid gap-4">
+                {visaSteps.map((step, i) => (
+                  <Reveal key={step} delay={i * 0.05}>
+                    <div className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F97343] font-display font-semibold text-[#060A16]">
+                        {i + 1}
+                      </div>
+                      <p className="pt-1.5 font-medium text-slate-200">{step}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
             </div>
           </div>
         </section>
