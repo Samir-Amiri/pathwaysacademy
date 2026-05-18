@@ -191,6 +191,30 @@ const universities = [
   "Vrije Universiteit Amsterdam", "Tilburg University", "The Hague University of Applied Sciences",
 ];
 
+const accreditation = [
+  {
+    name: "NVAO",
+    role: "Accreditation Organisation of the Netherlands and Flanders",
+    text: "The official body that accredits degree programmes and institutions. Its accreditation is what makes a Dutch degree formally recognised.",
+    url: "https://www.nvao.net/en",
+    linkLabel: "Visit NVAO",
+  },
+  {
+    name: "DUO — CROHO Register",
+    role: "Central Register of Higher Education Programmes",
+    text: "The official government register where you can verify that any Dutch study programme is recognised before you apply.",
+    url: "https://duo.nl/particulier/",
+    linkLabel: "Verify a programme",
+  },
+  {
+    name: "Nuffic",
+    role: "Dutch organisation for internationalisation in education",
+    text: "Supports international students and handles the evaluation and recognition of foreign diplomas and credentials.",
+    url: "https://www.nuffic.nl/en",
+    linkLabel: "Visit Nuffic",
+  },
+];
+
 const fees = [
   { item: "Pathway Programme Tuition", amount: "€12,000", note: "Total programme tuition fee" },
   { item: "Initial Payment", amount: "€3,000", note: "Due before 30 June 2026" },
@@ -767,6 +791,49 @@ export default function PathwaysAcademyWebsite() {
                 ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* -------------------------- Accreditation --------------------------- */}
+        <section id="recognition" className="bg-white/[0.03] px-6 py-24">
+          <div className="mx-auto max-w-7xl">
+            <Reveal className="mx-auto max-w-3xl text-center">
+              <Eyebrow>Recognised education</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-tight text-white md:text-5xl">
+                Education you can verify.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-300">
+                Dutch higher education is independently regulated. We always encourage students to confirm that their university and programme are officially recognised — and we show you exactly how.
+              </p>
+            </Reveal>
+            <div className="mt-14 grid gap-6 lg:grid-cols-3">
+              {accreditation.map((body, i) => (
+                <Reveal key={body.name} delay={i * 0.08}>
+                  <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-[#0B1120] p-8">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F97343]/15 text-[#FB8C66]">
+                      <ShieldIcon className="h-6 w-6" />
+                    </span>
+                    <h3 className="mt-5 font-display text-xl font-semibold text-white">{body.name}</h3>
+                    <p className="mt-1 text-sm font-medium text-[#FB8C66]">{body.role}</p>
+                    <p className="mt-3 flex-1 text-sm leading-6 text-slate-400">{body.text}</p>
+                    <a
+                      href={body.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#FB8C66]"
+                    >
+                      {body.linkLabel}
+                      <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-1" />
+                    </a>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+            <Reveal className="mx-auto mt-10 max-w-2xl text-center">
+              <p className="text-sm leading-6 text-slate-500">
+                Pathways Academy is an independent pathway and admissions advisory service. We are not an accreditation body — we guide students through this regulated system and help them study at officially recognised institutions.
+              </p>
+            </Reveal>
           </div>
         </section>
 
